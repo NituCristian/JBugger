@@ -1,0 +1,18 @@
+# Force line endings to unix.
+* text eol=lf
+
+# Explicitly declare text files to be converted to lf.
+*.java text
+*.sh text
+*.md text
+*.config text
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.jar binary
+*.war binary
+*.zip binary
+*.exe binary
+*.ttf binary

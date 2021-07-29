@@ -1,0 +1,21 @@
+<div class="container-fluid">
+	<table class="table">
+		<thead>
+			<tr>
+				
+				<th scope="col" style="width: 100%">Name</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let roleInstance of restRoleList">
+			
+				<td>{{roleInstance.name}}</td>
+				<td class="float-right" style="white-space:nowrap;">
+					<button type="button" class="btn btn-primary mr-3" (click)="roleId = roleInstance.roleId; goToRights(); setRightAccess()">See Rights</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+

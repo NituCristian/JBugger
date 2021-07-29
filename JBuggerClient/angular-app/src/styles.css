@@ -1,0 +1,202 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css");
+
+body,
+html {
+  height: 100%;
+  background-color: #fafafa !important;
+  /* filter: invert(1) hue-rotate(180deg) !important; */
+}
+
+.v-filter {
+    z-index: 2000;
+    top: 10px;
+    left: 320px;
+    position: fixed;
+    width: 350px;
+}
+
+.v-watermark {
+  font-size: 150pt;
+  position: fixed;
+  bottom: -11%;
+  right: 0;
+  color: #f0f0f0;
+  cursor: default;
+}
+
+.navbar {
+  background: #224499;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.nav-link:hover {
+  background-color: #1c3880;
+  border-radius: .25rem;
+}
+
+thead tr {
+  background-color: #fafafa !important;
+}
+
+tbody {
+  border-bottom: 1px solid #dee2e6;
+}
+
+td {
+  white-space: nowrap;
+  vertical-align: middle !important;
+}
+
+td button {
+  padding: .2rem .6rem !important;
+}
+
+td .btn-outline-secondary,
+td .deactivate,
+td .activate {
+  padding: 0 6px 0 6px !important;
+}
+
+select:not([disabled]) {
+  width: auto !important;
+}
+
+select:disabled[ng-reflect-model="closed"],
+select:disabled[ng-reflect-model="in_progress"],
+select:disabled[ng-reflect-model="new"],
+select:disabled[ng-reflect-model="rejected"],
+select:disabled[ng-reflect-model="fixed"],
+select:disabled[ng-reflect-model="info_needed"],
+select:disabled[ng-reflect-model="critical"],
+select:disabled[ng-reflect-model="high"],
+select:disabled[ng-reflect-model="medium"],
+select:disabled[ng-reflect-model="low"] {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 70%;
+  padding: 0 .25rem 0 .25rem;
+  color: white !important;
+  text-align: center !important;
+  text-align-last: center;
+  line-height: 20px;
+  margin-top: .23rem;
+  width: auto;
+}
+
+select:disabled[ng-reflect-model="closed"],
+select:disabled[ng-reflect-model="low"] {
+  background-color: gray !important;
+}
+
+select:disabled[ng-reflect-model="new"] {
+  background-color: #229944 !important;
+}
+
+select:disabled[ng-reflect-model="fixed"] {
+  background-color: #2dcc6f !important;
+}
+
+select:disabled[ng-reflect-model="rejected"],
+select:disabled[ng-reflect-model="critical"] {
+  background-color: #cc2d2d !important;
+}
+
+tr> :first-child .bi-slash-circle-fill {
+  color: #cc2d2d;
+  transform: translate(0px, -2px);
+}
+
+select:disabled[ng-reflect-model="info_needed"] {
+  background-color: #2d7fcc !important;
+}
+
+select:disabled[ng-reflect-model="in_progress"],
+select:disabled[ng-reflect-model="medium"] {
+  background-color: #ccbf2d !important;
+}
+
+tr> :first-child {
+  padding-left: 20px;
+}
+
+tr> :last-child {
+  padding-right: 20px;
+}
+
+tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+tr:nth-child(odd) {
+  background-color: white;
+}
+
+tr.critical.fixed,
+tr.critical.closed {
+  background-color: initial;
+}
+
+tr.critical {
+  background-color: #ffe6e6;
+}
+
+.nav-link {
+  border-bottom: 3px solid transparent !important;
+  cursor: default;
+}
+
+.nav-link.active {
+  border-bottom: 3px solid lightskyblue !important;
+}
+
+.nav-link {
+  padding-right: 1rem !important;
+  padding-left: 1rem !important;
+}
+
+th {
+  line-height: 2.5;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.dropdown-menu .dropdown-item {
+  white-space: break-spaces;
+}
+
+input,
+.form-control,
+select,
+.nav-link {
+  transition-property: background-color, color, padding;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+select:disabled[ng-reflect-model="high"] {
+background-color: #cc2d2d !important;
+}
+
+input:disabled,
+.form-control:disabled,
+select:disabled {
+  border: 1px solid transparent;
+  background: transparent;
+  opacity: 100;
+  appearance: none;
+  color: black;
+  height: initial;
+  resize: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+#newBugAttachment{
+  display:none !important;
+}

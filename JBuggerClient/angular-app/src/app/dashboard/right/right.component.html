@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="width: 100%">Name</th>
+                <th scope="col">
+                <button *ngIf="this.hasPermissionManagementRight" class="btn btn-primary float-right" (click)="toAdd=true"
+                    type="submit">New</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="toAdd">
+             
+                <td>
+                    <select class="form-control" style="width: 100%;" id="newRightName" [(ngModel)]="newAttribute.name"
+						name="newAttributeSeverity">
+						<option value="PERMISSION_MANAGEMENT">PERMISSION_MANAGEMENT</option>
+                        <option value="USER_MANAGEMENT">USER_MANAGEMENT</option>
+                        <option value="BUG_MANAGEMENT">BUG_MANAGEMENT</option>
+						<option value="BUG_CLOSE">BUG_CLOSE</option>
+						<option value="BUG_EXPORT_PDF">BUG_EXPORT_PDF</option>
+					</select>
+                </td>
+                <td style="white-space:nowrap;">
+                    <button id="float-right" class="btn btn-primary" type="button" (click)="addRightToRole(); toAdd = false">Add
+                        right</button>
+                </td>
+            </tr>
+            <tr *ngFor="let rightInstance of restRightList">
+          
+                
+                <td>{{rightInstance.name}}</td>
+                <td>
+                    <button *ngIf="this.hasPermissionManagementRight" type="button" class="btn btn-outline-danger"
+                        (click)="rightId = rightInstance.rightId; rightName = rightInstance.name; revokeRightFromRole(); toAdd = false">
+                        <svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,184 @@
+<div class="container-fluid">
+	<div class="v-filter">
+		<input class="form-control" placeholder="Filter by title" aria-label="Filter by title" type='text'
+			[(ngModel)]='listFilter' />
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col" style="width: 30%">Title</th>
+				<th scope="col" style="width: 70%">Description</th>
+				<th scope="col"></th>
+				<th scope="col">Version</th>
+				<th scope="col">Fixed</th>
+				<th scope="col">Date</th>
+				<th scope="col">Severity</th>
+				<th scope="col">Creator</th>
+				<th scope="col">Status</th>
+				<th scope="col">Assignee</th>
+				<!-- <th scope="col">Attachment</th> -->
+				<th scope="col">
+					<button *ngIf="this.hasBugManagementRight" class="btn btn-primary new-row float-right" type="submit"
+						(click)="toAdd=true">New</button>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngIf="toAdd">
+				<td></td>
+				<td><input class="form-control" style="width: 100%" type="text" id="newBugTitle"
+						[(ngModel)]="newAttribute.title" name="newAttributeTitle" /></td>
+				<td><textarea class="form-control" style='width: 100%' rows=1 id="newBugDesc"
+						[(ngModel)]="newAttribute.desc" name="newAttributeDesc"></textarea></td>
+				<td>
+					<label for="newBugAttachment">
+						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-plus"
+							fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							<path
+								d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z" />
+							<path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z" />
+							<path fill-rule="evenodd"
+								d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z" />
+						</svg>
+					</label>
+					<input class="form-control" style="width: 130%" type="file" (change)="uploadFile($event)"
+						id="newBugAttachment" [(ngModel)]="newAttribute.attachment" name="newAttributeAttachment" />
+				</td>
+				<td><input class="form-control" style="width: 100%" type="text" id="newBugVersion"
+						[(ngModel)]="newAttribute.version" name="newAttributeVersion" /></td>
+				<td><input class="form-control" style="width: 100%" type="text" id="newBugFixed"
+						[(ngModel)]="newAttribute.fixed" name="newAttributeFixed" /></td>
+				<td>Now</td>
+				<td><select class="form-control" style="width: auto;" id="newBugSeverity"
+						[(ngModel)]="newAttribute.severity" name="newAttributeSeverity">
+						<option value="critical" selected>critical</option>
+						<option value="high">high</option>
+						<option value="medium">medium</option>
+						<option value="low">low</option>
+					</select></td>
+				<td>{{this.loggedUser.username}}</td>
+				<td>new</td>
+				<td>
+					<!-- <input class="form-control" style="width: 100%" type="text" id="newBugAssigned"
+						[(ngModel)]="newAttribute.assigned" name="newAttributeAssigned" /> -->
+					<select class="form-control" style="width: auto;" [(ngModel)]="newAttribute.assignedTo"
+						name="newAttributeAssigned" id="newBugAssigned">
+						<option *ngFor="let user of restUserList" value="{{user.userId}}">{{user.username}}</option>
+					</select>
+
+				</td>
+				<td style="white-space: nowrap;" class="float-right">
+					<button type="button" class="btn btn-success submit-button mr-3" (click)="addBug()">
+						<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+						</svg>
+					</button>
+					<button type="button" class="btn btn-outline-danger" (click)="toAdd=false">
+						<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+						</svg>
+					</button>
+				</td>
+			</tr>
+			<ng-container *ngFor="let bugInstance of filteredBugs">
+				<tr class="{{bugInstance.severity}} {{bugInstance.status}}">
+					<td>{{bugInstance.bugId}}</td>
+					<td><input class="form-control" type="text" [(ngModel)]="bugInstance.title"
+							[disabled]="!bugInstance.isEditable" /></td>
+					<td><textarea class="form-control" rows=1 [(ngModel)]="bugInstance.description"
+							[disabled]="!bugInstance.isEditable"></textarea></td>
+					<td>
+						<svg *ngIf="bugInstance.attachment" width="1em" height="1em" viewBox="0 0 16 16"
+							class="bi bi-paperclip" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z" />
+						</svg>
+					</td>
+					<td><input class="form-control" size=1 type="text" [(ngModel)]="bugInstance.version"
+							[disabled]="!bugInstance.isEditable" /></td>
+					<td><input class="form-control" size=1 type="text" [(ngModel)]="bugInstance.fixedInVersion"
+							[disabled]="!bugInstance.isEditable" /></td>
+					<td>{{bugInstance.targetDate}}</td>
+					<td><select class="form-control" [(ngModel)]="bugInstance.severity"
+							[disabled]="!bugInstance.isEditable">
+							<option value="critical" selected>critical</option>
+							<option value="high">high</option>
+							<option value="medium">medium</option>
+							<option value="low">low</option>
+						</select></td>
+					<td>{{bugInstance.createdByUsername}}</td>
+					<td>
+						<select class="form-control" [(ngModel)]="bugInstance.status"
+							[disabled]="!bugInstance.isEditable">
+							<option value="{{bugInstance.status}}" selected disabled hidden>{{bugInstance.status}}
+							</option>
+							<option *ngIf="bugInstance.status === 'new' || bugInstance.status === 'info_needed'"
+								value="in_progress">in progress</option>
+							<option *ngIf="bugInstance.status === 'in_progress'" value="fixed">fixed</option>
+							<option *ngIf="bugInstance.status === 'new' || bugInstance.status === 'in_progress'"
+								value="rejected">rejected</option>
+							<option *ngIf="bugInstance.status === 'in_progress'" value="info_needed">info needed
+							</option>
+							<option
+								*ngIf="this.hasBugCloseRight && (bugInstance.status === 'rejected' || bugInstance.status === 'fixed')"
+								value="closed">closed</option>
+						</select>
+					</td>
+					<td>
+						<select class="form-control" [(ngModel)]="bugInstance.assignedTo"
+							[disabled]="!bugInstance.isEditable">
+							<option *ngFor="let user of restUserList" value="{{user.userId}}">{{user.username}}</option>
+						</select>
+					</td>
+
+					<td class="float-right">
+						<button type="button" class="btn btn-success mr-3"
+							*ngIf="bugInstance.isEditable && this.hasBugManagementRight"
+							(click)="bugInstance.isEditable=!bugInstance.isEditable; crtId=bugInstance.bugId; crtTitle=bugInstance.title; crtDesc=bugInstance.description; crtVersion=bugInstance.version;	crtFixed=bugInstance.fixedInVersion; crtSeverity=bugInstance.severity; crtStatus=bugInstance.status; crtAssigned=bugInstance.assignedTo; editBug()">
+							<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-check2" fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd"
+									d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+							</svg>
+						</button>
+
+						<button type="button" class="btn btn-outline-danger"
+							*ngIf="bugInstance.isEditable && this.hasBugManagementRight"
+							(click)="bugInstance.isEditable=!bugInstance.isEditable;">
+							<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg">
+								<path fill-rule="evenodd"
+									d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+							</svg>
+						</button>
+
+						<button type="button" class="btn btn-outline-secondary"
+							(click)="bugInstance.isEditable=!bugInstance.isEditable"
+							*ngIf="!bugInstance.isEditable && this.hasBugManagementRight">
+							<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-pencil-square"
+								fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+								<path
+									d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+								<path fill-rule="evenodd"
+									d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+							</svg>
+						</button>
+
+						<button type="button" class="btn btn-outline-danger" *ngIf="!bugInstance.isEditable"
+							style="visibility: hidden;">
+							<svg width="1em" height="1.7em" viewBox="0 0 16 16" class="bi bi-trash-fill"
+								fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							</svg>
+						</button>
+					</td>
+				</tr>
+			</ng-container>
+		</tbody>
+	</table>
+</div>

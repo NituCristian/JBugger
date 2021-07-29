@@ -1,0 +1,30 @@
+
+stages:
+ - javabuild
+ - angularbuild
+ 
+build java:
+  stage: javabuild
+  image: maven:3.6.3-jdk-8
+  script:
+    - mvn clean
+    - mvn install
+  tags:
+    - coc-kubernetes
+  artifacts:
+    reports:
+      junit:
+        - ./**/target/surefire-reports/TEST-*.xml
+        - ./**/target/failsafe-reports/TEST-*.xml
+
+#
+# simple unoptimized way to build an angular app
+#
+build angular:
+  stage: angularbuild
+  # version is just a guess
+  image: trion/ng-cli:latest
+  script:
+    - cd JBuggerClient/angular-app && npm install && ng build
+  tags:
+    - coc-kubernetes
